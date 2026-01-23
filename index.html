@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNS Ratings - Analytics Dashboard</title>
+    
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2563eb;       
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --success: #166534;
+            --danger: #dc2626;
+            --warning: #f59e0b;
+        }
+
+        body.dark-mode {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --primary: #60a5fa;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 40px;
+            font-size: 14px;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-body); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid var(--border);
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: 3px; }
+        
+        /* Header */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+            position: sticky; top: 0; z-index: 100;
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        body.dark-mode .glass-header { background: rgba(30, 41, 59, 0.95); }
+
+        .header-inner {
+            max-width: 1440px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .brand-box { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { height: 45px; width: auto; }
+        .brand-text h1 { margin: 0; font-size: 1.1rem; color: var(--primary); font-weight: 700; }
+        .brand-text span { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
+
+        .header-actions { display: flex; gap: 8px; align-items: center; }
+        .btn-icon {
+            background: transparent; border: 1px solid var(--border); color: var(--text-main);
+            width: 36px; height: 36px; border-radius: 8px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; text-decoration: none;
+        }
+        .btn-icon:hover { background: var(--border); color: var(--primary); }
+        .lang-group { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .lang-btn {
+            border: none; background: var(--bg-card); padding: 0 10px; height: 36px;
+            cursor: pointer; font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);
+            border-right: 1px solid var(--border);
+        }
+        .lang-btn:last-child { border-right: none; }
+        .lang-btn.active { background: var(--primary); color: white; }
+
+        /* GRID LAYOUT */
+        .container {
+            max-width: 1440px; margin: 20px auto; padding: 0 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        
+        @media (max-width: 1024px) { 
+            .container { grid-template-columns: 1fr; display: block; }
+            .grid-filter, .grid-promo, .grid-table, .grid-charts { margin-bottom: 20px; }
+            .sidebar-col { display: none; } 
+            .sidebar-col.active { display: block; }
+            .mobile-toggle { display: block !important; margin-bottom: 10px;}
+        }
+        
+        .mobile-toggle {
+            display: none; width: 100%; padding: 10px; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 8px; text-align: center; font-weight: bold; cursor: pointer;
+        }
+
+        /* Sidebar Column */
+        .sidebar-col {
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        /* Main Column */
+        .main-col {
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card); border-radius: var(--radius); padding: 15px;
+            border: 1px solid var(--border); box-shadow: var(--shadow);
+            box-sizing: border-box; 
+        }
+        
+        /* Filter Sidebar */
+        .form-group { margin-bottom: 12px; }
+        .form-label { display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px; font-weight: 500; }
+        .form-select {
+            width: 100%; padding: 8px; border-radius: 8px;
+            border: 1px solid var(--border); background: var(--bg-body); color: var(--text-main);
+            outline: none; font-size: 0.85rem; font-family: 'Inter', sans-serif;
+        }
+        .btn-block {
+            width: 100%; padding: 10px; background: var(--bg-body); border: 1px solid var(--border);
+            border-radius: 8px; cursor: pointer; font-weight: 600; color: var(--text-main);
+            transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-block:hover { background: var(--border); }
+
+        /* Promo Card (Compact) */
+        .promo-card {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white; text-align: center; padding: 25px 15px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: auto; 
+        }
+        .slogan-box {
+            min-height: 48px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem; font-weight: 600; font-style: italic; margin-top: 10px;
+            line-height: 1.4; opacity: 0; transition: opacity 0.5s; text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .slogan-visible { opacity: 1; }
+
+        /* Legal Disclaimer */
+        .legal-disclaimer { margin-top: 15px; font-size: 0.7rem; color: var(--text-secondary); text-align: center; line-height: 1.5; }
+        .legal-disclaimer a { color: var(--text-secondary); text-decoration: underline; }
+
+        /* TOP SECTION (KPIs + Charts) */
+        .top-analytics {
+            display: grid;
+            grid-template-columns: 2fr 1fr; 
+            gap: 20px;
+        }
+        @media (max-width: 900px) { .top-analytics { grid-template-columns: 1fr; } }
+
+        /* Left side of analytics */
+        .left-analytics { display: flex; flex-direction: column; gap: 20px; }
+        .kpi-row-header { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: 90px; }
+        
+        /* Right side of analytics */
+        .right-analytics { display: flex; flex-direction: column; gap: 20px; }
+        .kpi-single-header { height: 90px; }
+
+        /* Stat Cards */
+        .stat-card {
+            background: var(--bg-card); padding: 15px; border-radius: var(--radius);
+            border: 1px solid var(--border); box-shadow: var(--shadow);
+            display: flex; justify-content: space-between; align-items: center;
+            height: 100%; box-sizing: border-box;
+        }
+        .stat-val h2 { margin: 0; font-size: 1.25rem; color: var(--text-main); font-weight: 700; white-space: nowrap; }
+        .stat-val p { margin: 0; font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 4px; font-weight: 500;}
+        .stat-icon {
+            width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; 
+            justify-content: center; font-size: 1.2rem; flex-shrink: 0; margin-left: 10px;
+        }
+
+        /* Chart Wrappers */
+        .chart-card { 
+            background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border);
+            padding: 15px; box-shadow: var(--shadow); 
+            display: flex; flex-direction: column;
+        }
+        .chart-canvas-wrap { 
+            position: relative; 
+            width: 100%; 
+            height: 300px; 
+            overflow: hidden; 
+        }
+
+        /* Table */
+        .table-card { height: auto; }
+        .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th, td { padding: 10px 15px; border-bottom: 1px solid var(--border); text-align: left; }
+        th { background: var(--bg-body); font-weight: 600; color: var(--text-secondary); white-space: nowrap; cursor: pointer; user-select: none;}
+        th:hover { background: rgba(0,0,0,0.05); }
+        th.text-end, td.text-end { text-align: right; }
+        th.text-center, td.text-center { text-align: center; }
+        
+        .org-link { color: var(--primary); font-weight: 600; cursor: pointer; text-decoration: none; }
+        .org-link:hover { text-decoration: underline; }
+        
+        .trend-up { color: var(--success); display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .trend-down { color: var(--danger); display: flex; align-items: center; justify-content: center; gap: 4px; }
+
+        .rating-badge {
+            background-color: var(--primary); color: white; padding: 3px 8px; 
+            border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+            transition: 0.2s; white-space: nowrap;
+        }
+        .rating-badge:hover { transform: scale(1.05); opacity: 0.9; }
+        .rating-none { background-color: var(--border); color: var(--text-secondary); }
+
+        .table-title-group { display: flex; align-items: baseline; gap: 10px; }
+        .table-count-badge { font-weight: normal; font-size: 0.9rem; color: var(--text-secondary); }
+
+        /* Modals */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+            z-index: 1000; display: none; justify-content: center; align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--bg-card); width: 90%; max-width: 900px; 
+            padding: 25px; border-radius: var(--radius); position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border: 1px solid var(--border);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px;}
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary); }
+        
+        .info-row { display: flex; justify-content: space-between; font-size: 0.95rem; padding: 8px 0; border-bottom: 1px dashed var(--border); }
+        .info-label { color: var(--text-secondary); }
+        .info-val { font-weight: 600; color: var(--text-main); text-align: right;}
+        
+        .social-grid { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; justify-content: center;}
+        .social-btn-icon { 
+            width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 10px; 
+            text-decoration: none; font-size: 1.2rem; color: var(--text-main); display: flex; align-items: center; justify-content: center;
+            background: var(--bg-body); transition: 0.2s;
+        }
+        .social-btn-icon:hover { border-color: var(--primary); color: var(--primary); background: #fff; transform: translateY(-2px); }
+
+        .rating-table-wrapper { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .rating-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
+        .rating-table th { background: var(--bg-body); padding: 5px 8px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); }
+        .rating-table td { padding: 4px 8px; border-bottom: 1px solid var(--border); }
+        .rating-table tr:last-child td { border-bottom: none; }
+
+        .footer { border-top: 1px solid var(--border); padding: 20px; text-align: center; color: var(--text-secondary); font-size: 0.8rem; margin-top: 20px; background: var(--bg-card); }
+    </style>
+</head>
+<body>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loader">
+        <div class="spinner"></div>
+        <p id="t-loading">Ma'lumotlar yuklanmoqda...</p>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal" onclick="closeModal('infoModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <h3 id="m-title" style="margin:0; color:var(--primary); font-size:1.3rem;">-</h3>
+                    <small id="m-subtitle" style="color:var(--text-secondary); font-size:0.9rem;">-</small>
+                </div>
+                <button class="modal-close" onclick="closeModal('infoModal')">&times;</button>
+            </div>
+            <div id="m-body"></div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal" id="ratingModal" onclick="closeModal('ratingModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="rm-title" style="margin:0; color:var(--primary)">-</h3>
+                <button class="modal-close" onclick="closeModal('ratingModal')">&times;</button>
+            </div>
+            <div id="rm-body" style="overflow-x: auto;">
+                <!-- Table generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="glass-header">
+        <div class="header-inner">
+            <div class="brand-box">
+                <img src="https://raw.githubusercontent.com/sunattagayev-cloud/Ranking/refs/heads/images/logo_SNS.svg" alt="SNS Ratings" class="brand-logo">
+                <div class="brand-text">
+                    <h1 id="t-brand-title">Tashkilotlar Renkingi</h1>
+                    <span id="t-brand-sub">Moliyaviy tahlil va statistika</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="https://snsratings.uz" target="_blank" class="btn-icon" title="Website"><i class="fa-solid fa-globe"></i></a>
+                <a href="https://t.me/snsratings" target="_blank" class="btn-icon" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                <button class="btn-icon" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
+                <div class="lang-group">
+                    <button class="lang-btn active" onclick="setLang('uz')" id="btn-uz">UZ</button>
+                    <button class="lang-btn" onclick="setLang('ru')" id="btn-ru">RU</button>
+                    <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Mobile Toggle -->
+        <div class="mobile-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-filter"></i> <span id="t-mob-filter">Filtrlar</span></div>
+
+        <!-- Sidebar Column (Filters & Promo) -->
+        <aside class="sidebar-col" id="main-sidebar">
+            <!-- Filter Card -->
+            <div class="card">
+                <h3 style="margin-top:0; font-size:1rem;"><i class="fa-solid fa-filter"></i> <span id="t-filter">Filtrlar</span></h3>
+                
+                <div class="form-group">
+                    <label class="form-label" id="l-type">Tashkilot turi</label>
+                    <select id="filter-type" class="form-select" onchange="onTypeChange()"></select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" id="l-indicator">Ko'rsatkich</label>
+                    <select id="filter-indicator" class="form-select" onchange="renderDashboard()"></select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" id="l-start">Boshlang'ich davr</label>
+                    <select id="filter-start" class="form-select" onchange="onDateChange()"></select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" id="l-end">Yakuniy davr</label>
+                    <select id="filter-end" class="form-select" onchange="onDateChange()"></select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" id="l-unit">Birlik</label>
+                    <select id="filter-unit" class="form-select" onchange="renderDashboard()">
+                        <option value="1">mln so'm</option>
+                        <option value="1000">mlrd so'm</option>
+                        <option value="1000000">trln so'm</option>
+                    </select>
+                </div>
+
+                <button class="btn-block" onclick="resetFilters()">
+                    <i class="fa-solid fa-rotate-right"></i> <span id="t-reset">Qayta yuklash</span>
+                </button>
+                
+                <div class="legal-disclaimer">
+                    <span id="t-disclaimer">Ma'lumotlar ochiq manbalardan olingan bo'lib, axborot sifatida taqdim etiladi:</span><br>
+                    <a href="https://cbu.uz" target="_blank">cbu.uz</a>, 
+                    <a href="https://napp.uz" target="_blank">napp.uz</a>, 
+                    <a href="https://new.openinfo.uz" target="_blank">new.openinfo.uz</a>
+                </div>
+            </div>
+
+            <!-- Promo Card -->
+            <div class="card promo-card">
+                <i class="fa-solid fa-chart-pie" style="font-size: 3rem; opacity:0.9;"></i>
+                <div class="slogan-box" id="slogan-text">Professional Tahlil</div>
+            </div>
+        </aside>
+
+        <!-- Main Column (KPIs, Charts, Table) -->
+        <main class="main-col">
+            <!-- 1. Top Analytics (Charts & KPIs) -->
+            <div class="top-analytics">
+                <!-- Left (Wide): 2 KPIs + Trend -->
+                <div class="left-analytics">
+                    <div class="kpi-row-header">
+                        <div class="stat-card">
+                            <div class="stat-val">
+                                <p id="kpi-label-start">Bozor hajmi (Bosh.)</p>
+                                <h2 id="kpi-start">0</h2>
+                            </div>
+                            <div class="stat-icon" style="background:rgba(37, 99, 235, 0.1); color:var(--primary);"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-val">
+                                <p id="kpi-label-end">Bozor hajmi (Yakun.)</p>
+                                <h2 id="kpi-end">0</h2>
+                            </div>
+                            <div class="stat-icon" style="background:rgba(22, 101, 52, 0.1); color:var(--success);"><i class="fa-solid fa-flag-checkered"></i></div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h4 style="margin:0 0 10px 0;" id="t-chart-trend">Dinamika</h4>
+                        <div class="chart-canvas-wrap"><canvas id="trendChart"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- Right (Narrow): 1 KPI + Pie -->
+                <div class="right-analytics">
+                    <div class="kpi-single-header">
+                        <div class="stat-card">
+                            <div class="stat-val">
+                                <p id="t-kpi-growth">O'sish surati (Bozor)</p>
+                                <h2 id="kpi-growth" style="color:var(--warning);">0%</h2>
+                            </div>
+                            <div class="stat-icon" style="background:rgba(245, 158, 11, 0.1); color:var(--warning);"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h4 style="margin:0 0 10px 0;" id="t-chart-share">Bozor ulushi (Top 5)</h4>
+                        <div class="chart-canvas-wrap"><canvas id="pieChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Table Area -->
+            <div class="card table-card">
+                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
+                    <div class="table-title-group">
+                        <h4 style="margin:0; font-size: 1.1rem; color: var(--primary);" id="t-table-title">Asosiy Jadval</h4>
+                        <span id="t-table-count" class="table-count-badge"></span>
+                    </div>
+                    <button class="btn-icon" onclick="exportToExcel()" style="width:auto; padding:0 10px; gap:5px;">
+                        <i class="fa-solid fa-file-excel"></i> Excel
+                    </button>
+                </div>
+                <div class="table-wrap">
+                    <table id="mainTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortData('name')"><span id="th-name">Nomi</span> <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortData('rating')" class="text-center"><span id="th-rating">Reyting</span> <i class="fa-solid fa-sort"></i></th>
+                                <th class="text-end" onclick="sortData('startVal')"><span id="th-start-val">Bosh. qiymat</span> <i class="fa-solid fa-sort"></i></th>
+                                <th class="text-center" onclick="sortData('startShare')"><span id="th-start-share">Bosh. ulush</span> <i class="fa-solid fa-sort"></i></th>
+                                <th class="text-end" onclick="sortData('endVal')"><span id="th-end-val">Yakun. qiymat</span> <i class="fa-solid fa-sort"></i></th>
+                                <th class="text-center" onclick="sortData('endShare')"><span id="th-end-share">Yakun. ulush</span> <i class="fa-solid fa-sort"></i></th>
+                                <th class="text-center" onclick="sortData('growth')"><span id="th-growth">O'sish</span> <i class="fa-solid fa-sort"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="footer">
+        © 2025 Standard and Sensitive Ratings
+    </div>
+
+    <script>
+        // --- Single Data Source ---
+        const MAIN_DB_URL = "https://raw.githubusercontent.com/sunattagayev-cloud/Ranking/refs/heads/main/renking_umumiy_baza.json";
+
+        // --- State ---
+        let rawRankingData = []; 
+        let rawExtraData = [];
+        let rawRatingsData = []; 
+        
+        let organizedData = {}; 
+        let orgRatingsMap = {}; 
+        let availableTypes = [];
+        
+        let curLang = 'uz';
+        let trendChart = null;
+        let pieChart = null;
+        let sloganInterval = null;
+        
+        let sortCol = 'endVal';
+        let sortDesc = true;
+
+        // --- Multi-language Slogans ---
+        const slogansDict = {
+            uz: [
+                "Moliyaviy barqarorlik va ishonch", 
+                "Shaffoflik - rivojlanish garovi", 
+                "Aniq raqamlar, to'g'ri qarorlar"
+            ],
+            ru: [
+                "Финансовая стабильность и доверие",
+                "Прозрачность - залог развития",
+                "Точные цифры, правильные решения"
+            ],
+            en: [
+                "Financial stability and trust",
+                "Transparency is key to development",
+                "Accurate numbers, right decisions"
+            ]
+        };
+
+        // --- Translations Dictionary ---
+        const dict = {
+            types: {
+                "LOMBARD": { uz: "Lombard", ru: "Ломбард", en: "Pawnshop" },
+                "MIKROMOLIYA TASHKILOTI": { uz: "Mikromoliya Tashkiloti", ru: "Микрофинансовая организация", en: "Microfinance Organization" },
+                "BANK": { uz: "Bank", ru: "Банк", en: "Bank" },
+                "SUG'URTA TASHKILOTI": { uz: "Sug'urta Tashkiloti", ru: "Страховая организация", en: "Insurance Company" },
+                "BOSHQA EMITENTLAR": { uz: "Boshqa Emitentlar", ru: "Другие Эмитенты", en: "Other Issuers" }
+            },
+            indicators: {
+                "Jami aktivlar": { uz: "Jami aktivlar", ru: "Всего активы", en: "Total Assets" },
+                "Sof kreditlar": { uz: "Sof kreditlar", ru: "Чистые кредиты", en: "Net Loans" },
+                "Daromad keltiruvchi aktivlar": { uz: "Daromad keltiruvchi aktivlar", ru: "Доходные активы", en: "Interest-bearing Assets" },
+                "Jami depozitlat": { uz: "Jami depozitlar", ru: "Всего депозиты", en: "Total Deposits" },
+                "Jami majburiyatlar": { uz: "Jami majburiyatlar", ru: "Всего обязательства", en: "Total Liabilities" },
+                "Ustav kapitali": { uz: "Ustav kapitali", ru: "Уставной капитал", en: "Authorized Capital" },
+                "Jami kapital": { uz: "Jami kapital", ru: "Всего капитал", en: "Total Equity" },
+                "Uzoq muddatli investitsiyalar": { uz: "Uzoq muddatli investitsiyalar", ru: "Долгосрочные инвестиции", en: "Long-term Investments" },
+                "Qisqa muddatli investitsiyalar": { uz: "Qisqa muddatli investitsiyalar", ru: "Краткосрочные инвестиции", en: "Short-term Investments" },
+                "Uzoq muddatli majburiyatlar": { uz: "Uzoq muddatli majburiyatlar", ru: "Долгосрочные обязательства", en: "Long-term Liabilities" },
+                "Qisqa muddatli majburiyatlar": { uz: "Qisqa muddatli majburiyatlar", ru: "Краткосрочные обязательства", en: "Short-term Liabilities" },
+                "Kreditlar": { uz: "Kreditlar", ru: "Кредиты", en: "Loans" },
+                "Majburiyatlar": { uz: "Majburiyatlar", ru: "Обязательства", en: "Liabilities" },
+                "Banklardan jalb qilingan qarzlar": { uz: "Banklardan jalb qilingan qarzlar", ru: "Займы от банков", en: "Borrowings from Banks" },
+                "Sof sug'urta zaxiralari": { uz: "Sof sug'urta zaxiralari", ru: "Чистые страховые резервы", en: "Net Insurance Reserves" },
+                "Sug'urta to'lovlari": { uz: "Sug'urta to'lovlari", ru: "Страховые выплаты", en: "Insurance Payments" }
+            },
+            ratings: {
+                "Ekspress reyting": { uz: "Ekspress reyting", ru: "Экспресс-рейтинг", en: "Express Rating" },
+                "Xizmat ko'rsatish sifati reytingi": { uz: "Xizmat ko'rsatish sifati reytingi", ru: "Рейтинг качества обслуживания", en: "Service Quality Rating" },
+                "Kredit layoqati va ishonchlilik reytingi": { uz: "Kredit layoqati va ishonchlilik reytingi", ru: "Рейтинг кредитоспособности и надежности", en: "Creditworthiness and Reliability Rating" },
+                "Qimmatli qog'ozlar jozibadorligi reytingi": { uz: "Qimmatli qog'ozlar jozibadorligi reytingi", ru: "Рейтинг привлекательности ценных бумаг", en: "Securities Attractiveness Rating" },
+                "To'lov qobiliyati reytingi": { uz: "To'lov qobiliyati reytingi", ru: "Рейтинг платежеспособности", en: "Solvency Rating" },
+                "To'lov qobiliyati va ishonchlilik reytingi": { uz: "To'lov qobiliyati va ishonchlilik reytingi", ru: "Рейтинг платежеспособности и надежности", en: "Solvency and Reliability Rating" },
+                "Xizmat ko'rsatish sifati reytingi (mobil ilova)": { uz: "Xizmat ko'rsatish sifati reytingi (mobil ilova)", ru: "Рейтинг качества обслуживания (мобильное приложение)", en: "Service Quality Rating (Mobile App)" }
+            },
+            extraInfo: {
+                "Soliq to'lovchining identifikatsion raqami": { uz: "STIR (INN)", ru: "ИНН", en: "TIN" },
+                "Litsenziya raqami": { uz: "Litsenziya raqami", ru: "Номер лицензии", en: "License Number" },
+                "Litsenziya berilgan sana": { uz: "Litsenziya sanasi", ru: "Дата выдачи лицензии", en: "License Date" },
+                "Telefon raqami": { uz: "Telefon raqami", ru: "Номер телефона", en: "Phone Number" }
+            }
+        };
+
+        const i18n = {
+            uz: {
+                brand: "Tashkilotlar Renkingi", sub: "Moliyaviy tahlil va statistika",
+                filter: "Filtrlar", type: "Tashkilot turi", ind: "Ko'rsatkich", unit: "Birlik",
+                start: "Boshlang'ich davr", end: "Yakuniy davr", reset: "Qayta yuklash",
+                marketStart: "Bozor hajmi", marketEnd: "Bozor hajmi", growthGlobal: "O'sish surati (Bozor)",
+                trend: "Dinamika", share: "Bozor ulushi (Top 5)",
+                tableMain: "Asosiy Jadval", 
+                tableOther: "So'nggi davrlarda to'liq hisobot joylashtirgan tashkilotlar ma'lumotlari asosida",
+                name: "Tashkilot Nomi", rating: "Reyting",
+                val: "Qiymat", shareText: "Ulush", growth: "O'sish surati",
+                disc: "Ma'lumotlar ochiq manbalardan olingan bo'lib, axborot sifatida taqdim etiladi:",
+                loading: "Ma'lumotlar yuklanmoqda...", noData: "Ma'lumot mavjud emas",
+                others: "Boshqalar", mobFilter: "Filtrlar",
+                rType: "Reyting turi", rDate: "Sana", ratingInfo: "Reyting Tarixi", countSuffix: "ta"
+            },
+            ru: {
+                brand: "Рейтинг Организаций", sub: "Финансовый анализ и статистика",
+                filter: "Фильтры", type: "Тип организации", ind: "Показатель", unit: "Единица",
+                start: "Начальный период", end: "Конечный период", reset: "Сброс",
+                marketStart: "Объем рынка", marketEnd: "Объем рынка", growthGlobal: "Рост рынка",
+                trend: "Динамика", share: "Доля рынка (Топ 5)",
+                tableMain: "Основная Таблица",
+                tableOther: "На основе данных организаций, предоставивших полные отчеты за последние периоды",
+                name: "Название", rating: "Рейтинг",
+                val: "Значение", shareText: "Доля", growth: "Рост",
+                disc: "Данные получены из открытых источников и предоставляются в информационных целях:",
+                loading: "Загрузка данных...", noData: "Нет данных",
+                others: "Другие", mobFilter: "Фильтры",
+                rType: "Тип рейтинга", rDate: "Дата", ratingInfo: "История Рейтингов", countSuffix: ""
+            },
+            en: {
+                brand: "Organizations Ranking", sub: "Financial Analysis & Statistics",
+                filter: "Filters", type: "Organization Type", ind: "Indicator", unit: "Unit",
+                start: "Start Period", end: "End Period", reset: "Reset",
+                marketStart: "Market Size", marketEnd: "Market Size", growthGlobal: "Market Growth",
+                trend: "Dynamics", share: "Market Share (Top 5)",
+                tableMain: "Main Table",
+                tableOther: "Based on data from organizations that have submitted full reports in recent periods",
+                name: "Name", rating: "Rating",
+                val: "Value", shareText: "Share", growth: "Growth Rate",
+                disc: "Data is obtained from open sources and provided for informational purposes:",
+                loading: "Loading data...", noData: "No data available",
+                others: "Others", mobFilter: "Filters",
+                rType: "Rating Type", rDate: "Date", ratingInfo: "Rating History", countSuffix: ""
+            }
+        };
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initSlogans();
+            fetchData();
+        });
+
+        function toggleSidebar() {
+            document.getElementById('main-sidebar').classList.toggle('active');
+        }
+
+        function initSlogans() {
+            if(sloganInterval) clearInterval(sloganInterval);
+            let idx = 0;
+            const el = document.getElementById('slogan-text');
+            const list = slogansDict[curLang];
+            
+            // Immediate update
+            el.innerText = list[0];
+            el.classList.add('slogan-visible');
+
+            sloganInterval = setInterval(() => {
+                el.classList.remove('slogan-visible');
+                setTimeout(() => {
+                    idx = (idx + 1) % list.length;
+                    el.innerText = list[idx];
+                    el.classList.add('slogan-visible');
+                }, 500);
+            }, 4000);
+        }
+
+        // --- Data Fetching ---
+        async function fetchData() {
+            try {
+                const response = await fetch(MAIN_DB_URL);
+                if (!response.ok) throw new Error("Database fetch failed");
+                const json = await response.json();
+
+                rawRankingData = json.renking_malumotlari || [];
+                rawExtraData = json.qoshimcha_malumotlari || [];
+                rawRatingsData = json.reytinglar || []; 
+
+                processDataHierarchy();
+                processRatings();
+                
+                document.getElementById('loader').style.display = 'none';
+                populateTypeFilter();
+            } catch (error) {
+                alert("Xatolik: " + error.message);
+                document.getElementById('t-loading').innerText = "Xatolik: " + error.message;
+            }
+        }
+
+        function processDataHierarchy() {
+            organizedData = {};
+            const uniqueTypes = new Set();
+
+            rawRankingData.forEach(row => {
+                const type = row["Tashkilot turi"];
+                const name = row.Shortname;
+                const period = row.Davr;
+                const ind = row["Ko'rsatkichlar"];
+                const val = parseFloat(row["mln so'mda"]) || 0;
+
+                if(type) uniqueTypes.add(type);
+
+                if (!organizedData[type]) organizedData[type] = {};
+                if (!organizedData[type][ind]) organizedData[type][ind] = {};
+                if (!organizedData[type][ind][period]) organizedData[type][ind][period] = [];
+
+                organizedData[type][ind][period].push({ name, val });
+            });
+
+            availableTypes = Array.from(uniqueTypes).sort();
+            const specKey = "BOSHQA EMITENTLAR";
+            if (availableTypes.includes(specKey)) {
+                availableTypes = availableTypes.filter(t => t !== specKey);
+                availableTypes.push(specKey);
+            }
+        }
+
+        function normalizeKey(str) {
+            return str ? str.trim().toUpperCase().replace(/\s+/g, ' ') : "";
+        }
+
+        function processRatings() {
+            orgRatingsMap = {};
+            rawRatingsData.forEach(r => {
+                const name = normalizeKey(r["Tashkilot nomi"]);
+                if(!name) return;
+                if(!orgRatingsMap[name]) orgRatingsMap[name] = [];
+                orgRatingsMap[name].push(r);
+            });
+
+            for (const name in orgRatingsMap) {
+                orgRatingsMap[name].sort((a,b) => (b["Reyting berilgan sana"] || 0) - (a["Reyting berilgan sana"] || 0));
+            }
+        }
+
+        function excelDateToJS(serial) {
+            if (!serial) return "-";
+            const utc_days = Math.floor(serial - 25569);
+            const utc_value = utc_days * 86400;
+            const date_info = new Date(utc_value * 1000);
+            return date_info.toLocaleDateString();
+        }
+
+        function formatUrl(url) {
+            if (!url) return "#";
+            if (url.startsWith("http://") || url.startsWith("https://")) return url;
+            return "https://" + url;
+        }
+
+        // --- Filters ---
+        function populateTypeFilter() {
+            const sel = document.getElementById('filter-type');
+            sel.innerHTML = "";
+            availableTypes.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.text = translate(t, 'types');
+                sel.appendChild(opt);
+            });
+            if (availableTypes.length > 0) {
+                sel.selectedIndex = 0;
+                onTypeChange();
+            }
+        }
+
+        function onTypeChange() {
+            const type = document.getElementById('filter-type').value;
+            const indicators = Object.keys(organizedData[type] || {}).sort();
+            
+            const selInd = document.getElementById('filter-indicator');
+            selInd.innerHTML = "";
+            indicators.forEach(i => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.text = translate(i, 'indicators');
+                selInd.appendChild(opt);
+            });
+            
+            if (indicators.includes("Jami aktivlar")) selInd.value = "Jami aktivlar";
+            populatePeriods(type, selInd.value);
+        }
+
+        function populatePeriods(type, indicator) {
+            if(!organizedData[type] || !organizedData[type][indicator]) return;
+            const periods = Object.keys(organizedData[type][indicator]).sort(periodComparator);
+            
+            const selStart = document.getElementById('filter-start');
+            const selEnd = document.getElementById('filter-end');
+            
+            selStart.innerHTML = "";
+            selEnd.innerHTML = "";
+
+            periods.forEach(p => {
+                const pText = p.replace('_', ' ');
+                selStart.add(new Option(pText, p));
+                selEnd.add(new Option(pText, p));
+            });
+
+            if (periods.length > 0) {
+                selStart.selectedIndex = 0;
+                selEnd.selectedIndex = periods.length - 1;
+            }
+            renderDashboard();
+        }
+
+        function onDateChange() { renderDashboard(); }
+
+        // --- Render ---
+        function renderDashboard() {
+            const type = document.getElementById('filter-type').value;
+            const ind = document.getElementById('filter-indicator').value;
+            const startP = document.getElementById('filter-start').value;
+            const endP = document.getElementById('filter-end').value;
+            const unitEl = document.getElementById('filter-unit');
+            const unit = parseFloat(unitEl.value) || 1;
+
+            if (!type || !ind || !startP || !endP) return;
+
+            // Prepare Data
+            const startList = organizedData[type][ind][startP] || [];
+            const endList = organizedData[type][ind][endP] || [];
+
+            const startTotal = startList.reduce((sum, item) => sum + item.val, 0);
+            const endTotal = endList.reduce((sum, item) => sum + item.val, 0);
+
+            const startMap = new Map(startList.map(i => [i.name, i.val]));
+            const endMap = new Map(endList.map(i => [i.name, i.val]));
+            const allNames = new Set([...startMap.keys(), ...endMap.keys()]);
+            
+            let tableData = [];
+            allNames.forEach(name => {
+                const sv = startMap.get(name) || 0;
+                const ev = endMap.get(name) || 0;
+                const growth = (sv !== 0) ? ((ev - sv) / sv) * 100 : (ev > 0 ? 100 : 0);
+                
+                const ratings = orgRatingsMap[normalizeKey(name)] || [];
+                const latestRating = ratings.length > 0 ? ratings[0].Reyting : null;
+
+                tableData.push({
+                    name: name,
+                    rating: latestRating,
+                    startVal: sv / unit, 
+                    startShare: startTotal > 0 ? (sv / startTotal * 100) : 0,
+                    endVal: ev / unit,   
+                    endShare: endTotal > 0 ? (ev / endTotal * 100) : 0,
+                    growth: growth
+                });
+            });
+
+            // Update UI Title
+            const tableTitleEl = document.getElementById('t-table-title');
+            if (type === "BOSHQA EMITENTLAR") {
+                tableTitleEl.innerText = i18n[curLang].tableOther;
+            } else {
+                tableTitleEl.innerText = i18n[curLang].tableMain;
+            }
+
+            // Update Table Count next to title
+            const typeText = document.getElementById('filter-type').selectedOptions[0].text;
+            const suffix = i18n[curLang].countSuffix ? ` ${i18n[curLang].countSuffix}` : '';
+            document.getElementById('t-table-count').innerText = `(${tableData.length}${suffix} ${typeText})`;
+
+            // Headers
+            updateTableHeaders(startP, endP);
+
+            // KPIs
+            document.getElementById('kpi-start').innerText = formatNum(startTotal / unit);
+            document.getElementById('kpi-end').innerText = formatNum(endTotal / unit);
+            document.getElementById('kpi-label-start').innerText = `${i18n[curLang].marketStart} (${startP.replace('_', ' ')})`;
+            document.getElementById('kpi-label-end').innerText = `${i18n[curLang].marketEnd} (${endP.replace('_', ' ')})`;
+            
+            const marketGrowth = (startTotal !== 0) ? ((endTotal - startTotal)/startTotal)*100 : 0;
+            document.getElementById('kpi-growth').innerText = marketGrowth.toFixed(1) + "%";
+            document.getElementById('t-kpi-growth').innerText = i18n[curLang].growthGlobal;
+
+            renderTable(tableData);
+            renderTrendChart(type, ind, startP, endP, unit);
+            renderPieChart(tableData);
+        }
+
+        // --- Modules ---
+        function updateTableHeaders(s, e) {
+            const shortS = s.replace('_', ' ');
+            const shortE = e.replace('_', ' ');
+            document.getElementById('th-start-val').innerText = shortS;
+            document.getElementById('th-start-share').innerText = `% (${shortS})`;
+            document.getElementById('th-end-val').innerText = shortE;
+            document.getElementById('th-end-share').innerText = `% (${shortE})`;
+        }
+
+        function renderTable(data) {
+            data.sort((a, b) => {
+                const valA = a[sortCol];
+                const valB = b[sortCol];
+                if (typeof valA === 'string') return sortDesc ? valB.localeCompare(valA) : valA.localeCompare(valB);
+                if (valA === null) return 1; if(valB === null) return -1;
+                return sortDesc ? valB - valA : valA - valB;
+            });
+
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = "";
+
+            data.forEach((row, index) => {
+                const growthClass = row.growth >= 0 ? 'trend-up' : 'trend-down';
+                const growthIcon = row.growth >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down';
+                
+                const safeName = row.name.replace(/'/g, "&apos;");
+                const ratingBadge = row.rating 
+                    ? `<span class="rating-badge" onclick="openRatingModal('${safeName}')">${row.rating}</span>` 
+                    : `<span class="rating-badge rating-none">-</span>`;
+
+                const tr = `
+                    <tr>
+                        <td><span class="org-link" onclick="openInfoModal('${safeName}')">${row.name}</span></td>
+                        <td class="text-center">${ratingBadge}</td>
+                        <td class="text-end">${formatNum(row.startVal)}</td>
+                        <td class="text-center" style="color:var(--text-secondary)">${row.startShare.toFixed(2)}%</td>
+                        <td class="text-end" style="font-weight:600">${formatNum(row.endVal)}</td>
+                        <td class="text-center" style="color:var(--primary)">${row.endShare.toFixed(2)}%</td>
+                        <td class="text-center">
+                            <div class="${growthClass}">
+                                ${row.growth.toFixed(1)}% <i class="fa-solid ${growthIcon}"></i>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += tr;
+            });
+        }
+
+        function sortData(col) {
+            if (sortCol === col) sortDesc = !sortDesc;
+            else { sortCol = col; sortDesc = true; }
+            renderDashboard();
+        }
+
+        function renderTrendChart(type, ind, startP, endP, unit) {
+            const periods = Object.keys(organizedData[type][ind]).sort(periodComparator);
+            const sIdx = periods.indexOf(startP);
+            const eIdx = periods.indexOf(endP);
+            let range = [];
+            if (sIdx > -1 && eIdx > -1) {
+                const min = Math.min(sIdx, eIdx);
+                const max = Math.max(sIdx, eIdx);
+                range = periods.slice(min, max + 1);
+            }
+            if (range.length > 10) range = range.slice(range.length - 10);
+
+            const labels = range.map(p => p.replace('_', ' '));
+            const values = range.map(p => {
+                const tot = (organizedData[type][ind][p] || []).reduce((s, x) => s + x.val, 0);
+                return tot / unit;
+            });
+
+            const ctx = document.getElementById('trendChart');
+            if (trendChart) trendChart.destroy();
+
+            const isDark = document.body.classList.contains('dark-mode');
+            trendChart = new Chart(ctx, {
+                type: 'bar', 
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: translate(ind, 'indicators'),
+                        data: values,
+                        backgroundColor: '#2563eb',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: {
+                            display: true,
+                            color: isDark ? '#cbd5e1' : '#475569',
+                            anchor: 'end',
+                            align: 'top',
+                            font: { size: 10, weight: 'bold' },
+                            formatter: function(value) { return formatNum(value); }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: isDark?'#cbd5e1':'#475569' } },
+                        y: { 
+                            grid: { color: isDark?'#334155':'#e2e8f0' }, 
+                            ticks: { color: isDark?'#cbd5e1':'#475569' },
+                            grace: '10%' 
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPieChart(data) {
+            if (pieChart) pieChart.destroy();
+            const ctx = document.getElementById('pieChart');
+
+            const sorted = [...data].sort((a,b) => b.endVal - a.endVal);
+            const top5 = sorted.slice(0, 5);
+            const total = sorted.reduce((sum, i) => sum + i.endVal, 0);
+            const top5Sum = top5.reduce((sum, i) => sum + i.endVal, 0);
+            const others = total - top5Sum;
+
+            const labels = top5.map(d => d.name);
+            const values = top5.map(d => d.endVal);
+            
+            if (others > 0) {
+                labels.push(i18n[curLang].others);
+                values.push(others);
+            }
+
+            pieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#e2e8f0'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 10, font: {size: 10} } },
+                        datalabels: { display: false }
+                    }
+                }
+            });
+        }
+
+        // --- Modals ---
+        function openInfoModal(name) {
+            const modal = document.getElementById('infoModal');
+            document.getElementById('m-title').innerText = name;
+            
+            let info = rawExtraData.find(x => normalizeKey(x["Tashkilot nomi"]) === normalizeKey(name) || x.Shortname === name);
+            
+            const body = document.getElementById('m-body');
+            body.innerHTML = "";
+            document.getElementById('m-subtitle').innerText = info ? info["Tashkilot turi"] : "";
+
+            if (info) {
+                const skipKeys = ["Tashkilot nomi", "Tashkilot turi", "Shortname", "website", "facebook", "instagram", "linkedin", "x.com", "twitter", "telegram", "youtube"];
+                for (const [key, val] of Object.entries(info)) {
+                    if (val !== null && val !== "" && !skipKeys.includes(key)) {
+                        let label = translate(key, 'extraInfo');
+                        body.innerHTML += `
+                            <div class="info-row">
+                                <span class="info-label">${label}</span>
+                                <span class="info-val">${val}</span>
+                            </div>`;
+                    }
+                }
+
+                // Socials (Icons only)
+                let socialsHTML = '<div class="social-grid">';
+                const links = [
+                    {k:'website', i:'fa-solid fa-globe', t:'Web'},
+                    {k:'telegram', i:'fa-brands fa-telegram', t:'Telegram'},
+                    {k:'facebook', i:'fa-brands fa-facebook', t:'Facebook'},
+                    {k:'instagram', i:'fa-brands fa-instagram', t:'Instagram'},
+                    {k:'linkedin', i:'fa-brands fa-linkedin', t:'LinkedIn'},
+                    {k:'x.com', i:'fa-brands fa-x-twitter', t:'X'},
+                    {k:'twitter', i:'fa-brands fa-x-twitter', t:'X'},
+                    {k:'youtube', i:'fa-brands fa-youtube', t:'YouTube'}
+                ];
+                links.forEach(l => {
+                    if (info[l.k]) {
+                        socialsHTML += `<a href="${formatUrl(info[l.k])}" target="_blank" class="social-btn-icon" title="${l.t}"><i class="${l.i}"></i></a>`;
+                    }
+                });
+                socialsHTML += '</div>';
+                body.innerHTML += socialsHTML;
+            } else {
+                body.innerHTML = `<p style="text-align:center; padding:20px;">${i18n[curLang].noData}</p>`;
+            }
+            modal.classList.add('active');
+        }
+
+        function openRatingModal(name) {
+            const modal = document.getElementById('ratingModal');
+            document.getElementById('rm-title').innerText = i18n[curLang].ratingInfo;
+            const body = document.getElementById('rm-body');
+            body.innerHTML = "";
+
+            const history = orgRatingsMap[normalizeKey(name)] || [];
+            
+            if (history.length > 0) {
+                let html = `<div style="margin-bottom:15px; font-weight:bold; color:var(--primary); font-size:1.1rem;">${name}</div>
+                <div class="rating-table-wrapper">
+                <table class="rating-table">
+                    <thead><tr><th>${i18n[curLang].rating}</th><th>${i18n[curLang].rType}</th><th>${i18n[curLang].rDate}</th></tr></thead><tbody>`;
+                history.forEach(r => {
+                    html += `<tr>
+                        <td><span style="font-weight:bold;">${r["Reyting"]}</span></td>
+                        <td>${translate(r["Reyting turi"], 'ratings')}</td>
+                        <td>${excelDateToJS(r["Reyting berilgan sana"])}</td>
+                    </tr>`;
+                });
+                html += `</tbody></table></div>`;
+                body.innerHTML = html;
+            } else {
+                body.innerHTML = `<p style="text-align:center; padding:20px;">${i18n[curLang].noData}</p>`;
+            }
+            modal.classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // --- Helpers ---
+        function periodComparator(a, b) {
+            const p = s => { const [y,q]=s.split('_'); return parseInt(y)*10 + (q==='I'?1:q==='II'?2:q==='III'?3:4); };
+            return p(a) - p(b);
+        }
+        
+        function formatNum(n) { 
+            if (n === 0 || isNaN(n)) return "0";
+            let str = n.toFixed(1);
+            return str.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+        
+        function translate(key, context) {
+            if (dict[context] && dict[context][key]) return dict[context][key][curLang];
+            return key;
+        }
+
+        function setLang(lang) {
+            curLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-'+lang).classList.add('active');
+            
+            populateTypeFilter();
+            initSlogans();
+            
+            const t = i18n[curLang];
+            document.getElementById('t-brand-title').innerText = t.brand;
+            document.getElementById('t-brand-sub').innerText = t.sub;
+            document.getElementById('t-filter').innerText = t.filter;
+            document.getElementById('t-mob-filter').innerText = t.mobFilter;
+            document.getElementById('l-type').innerText = t.type;
+            document.getElementById('l-indicator').innerText = t.ind;
+            document.getElementById('l-unit').innerText = t.unit;
+            document.getElementById('l-start').innerText = t.start;
+            document.getElementById('l-end').innerText = t.end;
+            document.getElementById('t-reset').innerText = t.reset;
+            document.getElementById('t-chart-trend').innerText = t.trend;
+            document.getElementById('t-chart-share').innerText = t.share;
+            document.getElementById('th-name').innerText = t.name;
+            document.getElementById('th-rating').innerText = t.rating;
+            document.getElementById('th-growth').innerText = t.growth;
+            document.getElementById('th-start-val').innerText = t.val;
+            document.getElementById('th-start-share').innerText = t.shareText;
+            document.getElementById('th-end-val').innerText = t.val;
+            document.getElementById('th-end-share').innerText = t.shareText;
+            document.getElementById('t-disclaimer').innerText = t.disc;
+            document.getElementById('t-loading').innerText = t.loading;
+            
+            renderDashboard();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            renderDashboard();
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-unit').value = "1";
+            populateTypeFilter();
+        }
+
+        function exportToExcel() {
+            const table = document.getElementById('mainTable');
+            const wb = XLSX.utils.table_to_book(table, {sheet: "Ranking"});
+            XLSX.writeFile(wb, `SNS_Ranking_${new Date().toISOString().slice(0,10)}.xlsx`);
+        }
+    </script>
+</body>
+</html>
