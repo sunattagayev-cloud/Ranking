@@ -167226,16 +167226,23 @@
         {
             "Tashkilot turi": "BANK",
             "Tashkilot nomi": "AGROBANK",
-            "Reyting turi": "Xizmat ko'rsatish sifati reytingi",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
             "Reyting": "(uz) AAA",
             "Reyting berilgan sana": "2024-05-21"
         },
         {
             "Tashkilot turi": "BANK",
             "Tashkilot nomi": "AGROBANK",
-            "Reyting turi": "Xizmat ko'rsatish sifati reytingi",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
             "Reyting": "(uz) AAA",
             "Reyting berilgan sana": "2025-07-07"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "AGROBANK",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-10-26"
         },
         {
             "Tashkilot turi": "BANK",
@@ -167264,6 +167271,27 @@
             "Reyting turi": "Ekspress reyting",
             "Reyting": "(uz) AA-",
             "Reyting berilgan sana": "2023-08-17"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "ALOQABANK",
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA+",
+            "Reyting berilgan sana": "2026-07-20"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "ALOQABANK",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-08-15"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "ALOQABANK",
+            "Reyting turi": "Qimmatli qog'ozlar jozibadorligi reytingi",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-11-02"
         },
         {
             "Tashkilot turi": "BANK",
@@ -167296,9 +167324,9 @@
         {
             "Tashkilot turi": "BANK",
             "Tashkilot nomi": "APEX BANK",
-            "Reyting turi": null,
-            "Reyting": null,
-            "Reyting berilgan sana": null
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-09-29"
         },
         {
             "Tashkilot turi": "BANK",
@@ -167471,23 +167499,30 @@
         {
             "Tashkilot turi": "BANK",
             "Tashkilot nomi": "DAVR-BANK",
-            "Reyting turi": "Xizmat ko'rsatish sifati reytingi",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
             "Reyting": "(uz) AA",
             "Reyting berilgan sana": "2023-10-31"
         },
         {
             "Tashkilot turi": "BANK",
             "Tashkilot nomi": "DAVR-BANK",
-            "Reyting turi": "Xizmat ko'rsatish sifati reytingi",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
             "Reyting": "(uz) AAA",
             "Reyting berilgan sana": "2024-07-15"
         },
         {
             "Tashkilot turi": "BANK",
             "Tashkilot nomi": "DAVR-BANK",
-            "Reyting turi": "Xizmat ko'rsatish sifati reytingi",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
             "Reyting": "(uz) AAA",
             "Reyting berilgan sana": "2025-08-07"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "DAVR-BANK",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-08-04"
         },
         {
             "Tashkilot turi": "BANK",
@@ -167555,9 +167590,9 @@
         {
             "Tashkilot turi": "BANK",
             "Tashkilot nomi": "HAYOT BANK",
-            "Reyting turi": null,
-            "Reyting": null,
-            "Reyting berilgan sana": null
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-11-10"
         },
         {
             "Tashkilot turi": "BANK",
@@ -167586,6 +167621,20 @@
             "Reyting turi": "Ekspress reyting",
             "Reyting": "(uz) A+",
             "Reyting berilgan sana": "2023-08-29"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "INFINBANK",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-08-13"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "INFINBANK",
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-09-21"
         },
         {
             "Tashkilot turi": "BANK",
@@ -167883,6 +167932,20 @@
         },
         {
             "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "POYTAXT BANK",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-08-25"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "POYTAXT BANK",
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA-",
+            "Reyting berilgan sana": "2026-10-15"
+        },
+        {
+            "Tashkilot turi": "BANK",
             "Tashkilot nomi": "SODEROT BANK",
             "Reyting turi": "Ekspress reyting",
             "Reyting": "(uz) BBB",
@@ -168013,6 +168076,27 @@
             "Reyting turi": "Ekspress reyting",
             "Reyting": "(uz) A",
             "Reyting berilgan sana": "2023-09-06"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "TURONBANK",
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA+",
+            "Reyting berilgan sana": "2026-07-01"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "TURONBANK",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (call markaz)",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-08-14"
+        },
+        {
+            "Tashkilot turi": "BANK",
+            "Tashkilot nomi": "TURONBANK",
+            "Reyting turi": "Qimmatli qog'ozlar jozibadorligi reytingi",
+            "Reyting": "(uz) A-",
+            "Reyting berilgan sana": "2026-10-29"
         },
         {
             "Tashkilot turi": "BANK",
@@ -171719,6 +171803,13 @@
         },
         {
             "Tashkilot turi": "LOMBARD",
+            "Tashkilot nomi": "DAROMAD INVEST LOMBARD",
+            "Reyting turi": "Ekspress reyting",
+            "Reyting": "(uz) A+",
+            "Reyting berilgan sana": "2026-05-21"
+        },
+        {
+            "Tashkilot turi": "LOMBARD",
             "Tashkilot nomi": "DAVR LOMBARD",
             "Reyting turi": null,
             "Reyting": null,
@@ -172545,6 +172636,13 @@
         },
         {
             "Tashkilot turi": "LOMBARD",
+            "Tashkilot nomi": "LOMBARD SHOKIR INVEST",
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-02-24"
+        },
+        {
+            "Tashkilot turi": "LOMBARD",
             "Tashkilot nomi": "LOMBARD SIMXO RUBEN",
             "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
             "Reyting": "(uz) BBB+",
@@ -172696,6 +172794,13 @@
             "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
             "Reyting": "(uz) AA",
             "Reyting berilgan sana": "2025-02-24"
+        },
+        {
+            "Tashkilot turi": "LOMBARD",
+            "Tashkilot nomi": "LOMBARD TASHKREDIT",
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-02-23"
         },
         {
             "Tashkilot turi": "LOMBARD",
@@ -173000,6 +173105,13 @@
         },
         {
             "Tashkilot turi": "LOMBARD",
+            "Tashkilot nomi": "SHERZOD KREDIT INVEST LOMBARD",
+            "Reyting turi": "Ekspress reyting",
+            "Reyting": "(uz) A-",
+            "Reyting berilgan sana": "2026-09-30"
+        },
+        {
+            "Tashkilot turi": "LOMBARD",
             "Tashkilot nomi": "STAR KREDIT LOMBARD",
             "Reyting turi": null,
             "Reyting": null,
@@ -173102,6 +173214,13 @@
             "Reyting turi": "Ekspress reyting",
             "Reyting": "(uz) AA-",
             "Reyting berilgan sana": "2025-02-18"
+        },
+        {
+            "Tashkilot turi": "LOMBARD",
+            "Tashkilot nomi": "YANGI YO`L ISHONCH KREDIT LOMBARD",
+            "Reyting turi": "Ekspress reyting",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-05-22"
         },
         {
             "Tashkilot turi": "LOMBARD",
@@ -173421,6 +173540,13 @@
         {
             "Tashkilot turi": "MIKROMOLIYA TASHKILOTI",
             "Tashkilot nomi": "CHIRCHIQ KREDIT MMT",
+            "Reyting turi": "Ekspress reyting",
+            "Reyting": "(uz) AA-",
+            "Reyting berilgan sana": null
+        },
+        {
+            "Tashkilot turi": "MIKROMOLIYA TASHKILOTI",
+            "Tashkilot nomi": "CHIRCHIQ KREDIT MMT",
             "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
             "Reyting": "(uz) BB",
             "Reyting berilgan sana": null
@@ -173451,13 +173577,6 @@
             "Tashkilot nomi": "CHIRCHIQ KREDIT MMT",
             "Reyting turi": "Ekspress reyting",
             "Reyting": "(uz) A",
-            "Reyting berilgan sana": null
-        },
-        {
-            "Tashkilot turi": "MIKROMOLIYA TASHKILOTI",
-            "Tashkilot nomi": "CHIRCHIQ KREDIT MMT",
-            "Reyting turi": "Ekspress reyting",
-            "Reyting": "(uz) AA-",
             "Reyting berilgan sana": null
         },
         {
@@ -173498,9 +173617,9 @@
         {
             "Tashkilot turi": "MIKROMOLIYA TASHKILOTI",
             "Tashkilot nomi": "DELTA MMT",
-            "Reyting turi": null,
-            "Reyting": null,
-            "Reyting berilgan sana": null
+            "Reyting turi": "Kredit layoqati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2026-03-26"
         },
         {
             "Tashkilot turi": "MIKROMOLIYA TASHKILOTI",
@@ -174464,15 +174583,15 @@
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "ALFA LIFE INSURANCE",
-            "Reyting turi": "To'lov qobiliyati reytingi",
-            "Reyting": "(uz) A++",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA+",
             "Reyting berilgan sana": "2022-12-19"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "ALFA LIFE INSURANCE",
-            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
-            "Reyting": "(uz) AA+",
+            "Reyting turi": "To'lov qobiliyati reytingi",
+            "Reyting": "(uz) A++",
             "Reyting berilgan sana": "2022-12-19"
         },
         {
@@ -174519,6 +174638,13 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "ALFA LIFE INSURANCE",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA-",
+            "Reyting berilgan sana": "2026-04-10"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "ALSKOM SUG`URTA KOMPANIYASI",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AAA-",
@@ -174544,6 +174670,13 @@
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AAA",
             "Reyting berilgan sana": "2025-06-02"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "ALSKOM SUG`URTA KOMPANIYASI",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-06-09"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -174593,6 +174726,13 @@
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AAA",
             "Reyting berilgan sana": "2025-03-05"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "APEX INSURANCE",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-02-26"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -174673,10 +174813,17 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "ARIA SUG`URTA TASHKILOTI",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA-",
+            "Reyting berilgan sana": "2026-03-12"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "ASIA INSURANCE SUG`URTA KOMPANIYASI",
-            "Reyting turi": null,
-            "Reyting": null,
-            "Reyting berilgan sana": null
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-10-12"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -174691,6 +174838,13 @@
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AAA-",
             "Reyting berilgan sana": "2025-08-11"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "EUROASIA INSURANCE",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-03-30"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -174729,6 +174883,13 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "HAMKOR SUG`URTA",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA-",
+            "Reyting berilgan sana": "2026-04-13"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "IMKON-SUG`URTA",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) A-",
@@ -174744,9 +174905,9 @@
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "IMPEX-INSURANCE",
-            "Reyting turi": null,
-            "Reyting": null,
-            "Reyting berilgan sana": null
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-08-12"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -174757,23 +174918,16 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
-            "Tashkilot nomi": "INGO-UZBEKISTON SUG`URTA",
-            "Reyting turi": null,
-            "Reyting": null,
-            "Reyting berilgan sana": null
+            "Tashkilot nomi": "INSON",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA",
+            "Reyting berilgan sana": "2022-05-13"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "INSON",
             "Reyting turi": "To'lov qobiliyati reytingi",
             "Reyting": "(uz) A++",
-            "Reyting berilgan sana": "2022-05-13"
-        },
-        {
-            "Tashkilot turi": "SUG'URTA TASHKILOTI",
-            "Tashkilot nomi": "INSON",
-            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
-            "Reyting": "(uz) AA",
             "Reyting berilgan sana": "2022-05-13"
         },
         {
@@ -174820,6 +174974,13 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "INSON",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-07-20"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "ISHONCH SUG`URTA KOMPANIYASI",
             "Reyting turi": null,
             "Reyting": null,
@@ -174842,6 +175003,13 @@
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "KAFOLAT HAYOT INSURANCE",
+            "Reyting turi": "To'lov qobiliyati reytingi",
+            "Reyting": "(uz) A++",
+            "Reyting berilgan sana": "2022-08-23"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "KAFOLAT HAYOT INSURANCE",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AA",
             "Reyting berilgan sana": "2022-08-23"
@@ -174849,9 +175017,9 @@
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "KAFOLAT HAYOT INSURANCE",
-            "Reyting turi": "To'lov qobiliyati reytingi",
-            "Reyting": "(uz) A++",
-            "Reyting berilgan sana": "2022-08-23"
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA+",
+            "Reyting berilgan sana": "2026-04-06"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -174911,10 +175079,24 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "KAFOLAT SUG`URTA KOMPANIYASI",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-05-19"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "KAPITAL SUG`URTA",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AA",
             "Reyting berilgan sana": "2020-12-02"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "KAPITAL SUG`URTA",
+            "Reyting turi": "Qimmatli qog'ozlar jozibadorligi reytingi",
+            "Reyting": "(uz) AA+",
+            "Reyting berilgan sana": "2021-05-10"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -174928,13 +175110,6 @@
             "Tashkilot nomi": "KAPITAL SUG`URTA",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AA",
-            "Reyting berilgan sana": "2021-05-10"
-        },
-        {
-            "Tashkilot turi": "SUG'URTA TASHKILOTI",
-            "Tashkilot nomi": "KAPITAL SUG`URTA",
-            "Reyting turi": "Qimmatli qog'ozlar jozibadorligi reytingi",
-            "Reyting": "(uz) AA+",
             "Reyting berilgan sana": "2021-05-10"
         },
         {
@@ -174971,6 +175146,13 @@
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AAA",
             "Reyting berilgan sana": "2025-05-12"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "KAPITAL SUG`URTA",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-05-18"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -175044,6 +175226,13 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "NEO INSURANCE CORP",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA-",
+            "Reyting berilgan sana": "2026-04-30"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "O`ZAGROSUG`URTA",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AAA-",
@@ -175079,6 +175268,13 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "O`ZBEKINVEST",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-10-12"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "O`ZBEKINVEST HAYOT SUG`URTA KOMPANIYASI",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AA+",
@@ -175090,6 +175286,27 @@
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AA+",
             "Reyting berilgan sana": "2022-04-26"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "O`ZBEKINVEST HAYOT SUG`URTA KOMPANIYASI",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA-",
+            "Reyting berilgan sana": "2026-09-08"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "O`ZBEKINVEST HAYOT SUG`URTA KOMPANIYASI",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-11-11"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "QUANTUM INSURANCE",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-07-02"
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
@@ -175135,6 +175352,13 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "SEMURG INSURANCE",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AA+",
+            "Reyting berilgan sana": "2026-11-04"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "SQB INSURANCE SUG`URTA KOMPANIYASI",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) A+",
@@ -175170,10 +175394,31 @@
         },
         {
             "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "TRUST-INSURANCE",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-04-14"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
             "Tashkilot nomi": "XALQ SUG`URTA",
             "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
             "Reyting": "(uz) AA+",
             "Reyting berilgan sana": "2023-04-11"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "XALQ SUG`URTA",
+            "Reyting turi": "To'lov qobiliyati va ishonchlilik reytingi",
+            "Reyting": "(uz) AAA-",
+            "Reyting berilgan sana": "2026-03-16"
+        },
+        {
+            "Tashkilot turi": "SUG'URTA TASHKILOTI",
+            "Tashkilot nomi": "XALQ SUG`URTA",
+            "Reyting turi": "Xizmat ko'rsatish sifati reytingi (CSI va NPS)",
+            "Reyting": "(uz) AAA",
+            "Reyting berilgan sana": "2026-10-30"
         }
     ]
 }
